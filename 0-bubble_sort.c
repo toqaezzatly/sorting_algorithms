@@ -8,9 +8,9 @@
  */
 void swap(int *xp, int *yp)
 {
-    int temp = *xp;
-    *xp = *yp;
-    *yp = temp;
+	int temp = *xp;
+	*xp = *yp;
+	*yp = temp;
 }
 
 /**
@@ -20,15 +20,16 @@ void swap(int *xp, int *yp)
  */
 void print_array(int *array, size_t size)
 {
-    char buffer[50];
-    size_t i;
+	char buffer[50];
+	size_t i;
+	int length;
 
-    for (i = 0; i < size; i++)
-    {
-        int length = sprintf(buffer, "%d ", array[i]);
-        write(1, buffer, length);
-    }
-    write(1, "\n", 1);
+	for (i = 0; i < size; i++)
+	{
+		length = sprintf(buffer, "%d ", array[i]);
+		write(1, buffer, length);
+	}
+	write(1, "\n", 1);
 }
 
 /**
@@ -39,18 +40,18 @@ void print_array(int *array, size_t size)
  */
 void bubble_sort(int *array, size_t size)
 {
-    size_t i, j;
+	size_t i, j;
 
-    for (i = 0; i < size - 1; i++)
-    {
-        for (j = 0; j < size - i - 1; j++)
-        {
-            if (array[j] > array[j + 1])
-            {
-                swap(&array[j], &array[j + 1]);
-                print_array(array, size);
-            }
-        }
-    }
+	for (i = 0; i < size - 1; i++)
+	{
+		for (j = 0; j < size - i - 1; j++)
+		{
+			if (array[j] > array[j + 1])
+			{
+				swap(&array[j], &array[j + 1]);
+				print_array(array, size);
+			}
+		}
+	}
 }
 
