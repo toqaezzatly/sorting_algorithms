@@ -14,25 +14,6 @@ void swap(int *xp, int *yp)
 }
 
 /**
- * print_array - Prints an array of integers.
- * @array: The array to be printed.
- * @size: The size of the array.
- */
-void print_array(int *array, size_t size)
-{
-	char buffer[50];
-	size_t i;
-	int length;
-
-	for (i = 0; i < size; i++)
-	{
-		length = sprintf(buffer, "%d ", array[i]);
-		write(1, buffer, length);
-	}
-	write(1, "\n", 1);
-}
-
-/**
  * bubble_sort - Sorts an array of integers in ascending order
  *               using the Bubble sort algorithm.
  * @array: The array to be sorted.
