@@ -40,7 +40,7 @@ int lomuto_partition(int *array, ssize_t first, ssize_t last, size_t size)
 	}
 	if (array[current] != array[last])
 	{
-		swap(arra ay, current, last);
+		swap(array, current, last);
 		print_array(array, size);
 	}
 	return (current);
