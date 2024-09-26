@@ -1,92 +1,110 @@
 #include "sort.h"
-
+#include <stdio.h>
 /**
- * print_merge - print and merge
- * @array: random number array
- * @p1: changer 1
- * @p2: changer 2
- * @size: array size
- * Return: void
+ *_calloc - this is a calloc function
+ *@nmemb: number of elemets
+ *@size: bit size of each element
+ *Return: pointer to memory assignement
  */
-void print_merge(int *array, int *p1, int *p2, size_t size)
+void *_calloc(unsigned int nmemb, unsigned int size)
 {
-	int a = 0;
-	int b = 0;
-	int c = 0;
-	int size_p1 = size / 2;
-	int size_p2 = size - size_p1;
+	unsigned int i = 0;
+	char *p;
 
-	/** Compares elements of arrays and merges back to original array. Prints */
-	while (a < size_p1 && b < size_p2)
+	if (nmemb == 0 || size == 0)
+		return ('\0');
+	p = malloc(nmemb * size);
+	if (p == '\0')
+		return ('\0');
+	for (i = 0; i < (nmemb * size); i++)
+		p[i] = '\0';
+	return (p);
+}
+/**
+ *merge - make a merge
+ *@arr: one from start to mid
+ *@tmp: temp array used in merge, was created outside to
+ *optimize reducing the system calls
+ *@start: first element position
+ *@mid: array middle
+ *@end: last element position
+ **/
+void merge(int *arr, int *tmp, int start, int mid, int end)
+{
+	/*  sizes and temp arrays */
+	int size_left = mid - start + 1, size_right = end - mid;
+	int *array_left, *array_right;
+	/* counters */
+	int left, right, i = 0;
+
+	array_left = &tmp[0];
+	array_right = &tmp[size_right];
+	for (left = 0; left < size_left; left++)
+		array_left[left] = arr[start + left];
+	for (right = 0; right < size_right; right++)
+		array_right[right] = arr[mid + 1 + right];
+	left = 0, right = 0, i = start;
+	/* merging tmp arrays into main array*/
+	while (left < size_left && right < size_right)
 	{
-
-		if (p1[a] < p2[b])
-		{
-			array[c++] = p1[a++];
-		}
-
+		if (array_left[left] <= array_right[right])
+			arr[i] = array_left[left], left++;
 		else
-		{
-			array[c++] = p2[b++];
-		}
-
+			arr[i] = array_right[right], right++;
+		i++;
 	}
-
-	while (a < size_p1)
-	{
-		array[c++] = p1[a++];
-	}
-
-	while (b < size_p2)
-	{
-		array[c++] = p2[b++];
-	}
-
+	/* merging remaining left array into main array*/
+	while (left < size_left)
+		arr[i] = array_left[left], left++, i++;
+	/* merging remaining right array into main array*/
+	while (right < size_right)
+		arr[i] = array_right[right], right++, i++;
 	printf("Merging...\n");
 	printf("[left]: ");
-	print_array(p1, size_p1);
+	print_array(array_left, left);
 	printf("[right]: ");
-	print_array(p2, size_p2);
+	print_array(array_right, right);
 	printf("[Done]: ");
-	print_array(array, size);
+	print_array(&arr[start], left + right);
 }
-
 /**
- * merge_sort - merge sort
- * @array: random number array
- * @size: array size
- * Return: void
+ *mergesort - function that sorts an array of integers
+ *in ascending order using the Merge sort algorithm
+ *@array: array of integers
+ *@tmp: temp array used in merge, was created outside to
+ *optimize reducing the system calls
+ *@start: fisrt element position
+ *@end: last element position
+ *Return: void
+ */
+void mergesort(int *array, int *tmp, int start, int end)
+{
+	int mid;
+
+	mid = (start + end) / 2;
+	if ((start + end) % 2 == 0)
+		mid--;
+	if (mid >= start)
+	{
+		mergesort(array, tmp, start, mid);
+		mergesort(array, tmp, mid + 1, end);
+		merge(array, tmp, start, mid, end);
+	}
+}
+/**
+ *merge_sort - function that sorts an array of integers
+ *in ascending order using the Merge sort algorithm
+ *@size: size of the list
+ *@array: array of integers
+ *Return: void
  */
 void merge_sort(int *array, size_t size)
 {
-	int *izquierda, *derecha;
-	size_t centro;
-	size_t aux;
+	int *tmp;
 
-	int aux_pos[1024];
-
-	if (array == NULL || size < 2)
-	{
+	if (!array || size < 2)
 		return;
-	}
-
-	centro = size / 2;
-	izquierda = aux_pos;
-	derecha = &aux_pos[centro];
-
-	for (aux = 0; aux < centro; aux++)
-	{
-		izquierda[aux] = array[aux];
-	}
-
-	for (aux = centro; aux < size; aux++)
-	{
-		derecha[aux - centro] = array[aux];
-	}
-
-	merge_sort(izquierda, centro);
-
-	merge_sort(derecha, size - centro);
-
-	print_merge(array, izquierda, derecha, size);
+	tmp = _calloc(size, sizeof(int));
+	mergesort(array, tmp, 0, size - 1);
+	free(tmp);
 }
